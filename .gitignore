@@ -1,0 +1,8 @@
+# visual studio code files
+.vs/*
+
+# node modules
+node_modules/*
+
+# tmp files
+tmp/*
