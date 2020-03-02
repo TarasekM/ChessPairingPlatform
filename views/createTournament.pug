@@ -1,0 +1,30 @@
+extends shared\shared
+
+block config
+    -
+        var title = 'Stwórz Turniej'
+        var tournamentSystems = ['Kołowy', 'Szwajcarski', 'Pucharowy']
+        var postUrl = 'postTournament'
+    
+block content-body
+    div(class='container')
+        form(action=postUrl method='post' enctype='application/json')
+            div(class="form-horizontal")
+                div(class="form-group")
+                    label(for='Title' class="control-label col-md-5") Tytuł turnieju:
+                    div(class="col-md-10")
+                        input(class="form-control" type="text" name="Title" id="Title")
+                div(class="form-group")
+                    label(class="control-label col-md-5") System Parowania:
+                    div(class="col-md-10")
+                        select(class="form-control" name="PairingSystem" id="PairingSystem" )
+                            each system in tournamentSystems
+                                option(value=system)
+                                    p=system
+                div(class="form-group")
+                    label(class="control-label col-md-5") Data rozpoczęcia turnieju:
+                        input(class="form-control" type="date" name="Date" id="Date")
+                div(class="form-group")
+                    div(class="col-md-offset-2 col-md-10")
+                        input(type="submit" value="Stwórz" class="btn btn-primary")
+                    
