@@ -1,0 +1,29 @@
+extends shared\shared
+
+block config
+    -
+        var title = 'Wyniki Turnieju'
+
+block content-body
+    div(class='container')
+        h1=title
+        table(class="table")
+            thead
+                th(scope="col") Miejsce
+                th(scope="col") Nr startowy
+                th(scope="col") Imię i nazwisko
+                th(scope="col") Punkty
+                th(scope="col") Buchholz
+            tbody
+                each player, index in data
+                    tr
+                        th(scope="row")=(index + 1)
+                        td=(player.id + 1)
+                        td=player.name
+                        td=player.score
+                        td TODO
+
+        form(action=('/pairTournament' + tournamentID) method="GET")
+            div(class="form-horizontal d-flex justify-content-center align-items-center")
+                div(class="form-group")
+                    input(type="submit" value="Przejdź do następnej rundy" class="btn btn-primary")

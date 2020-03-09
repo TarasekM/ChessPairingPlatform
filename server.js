@@ -155,17 +155,21 @@ app.post('/postPlayer', urlencodedParser, async(req, res) => {
 });
 
 app.get('/standings', (req, res)=>{
-    var xhr = new XMLHttpRequest();
+    var tournamentID = req.query.id
     var url = (apiURL + endpoints.tournament + '/' +
-               req.query.id + endpoints.highscore);
+               tournamentID + endpoints.highscore);
+    var xhr = new XMLHttpRequest();
     xhr.open("GET", url, true);
     xhr.onload = function (e) {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 var data = JSON.parse(this.responseText)
-                res.render('standings', { data: data })
+                res.render('standings', { 
+                    data: data,
+                    tournamentID: tournamentID,
+                });
             } else {
-                res.sendStatus(xhr.status)
+                res.sendStatus(xhr.status);
             }
         }
     };
