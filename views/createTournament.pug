@@ -3,11 +3,11 @@ extends shared\shared
 block config
     -
         var title = 'Stwórz Turniej'
-        var tournamentSystems = ['Kołowy', 'Szwajcarski', 'Pucharowy']
         var postUrl = 'postTournament'
     
 block content-body
     div(class='container')
+        h1=title
         form(action=postUrl method='post' enctype='application/json')
             div(class="form-horizontal")
                 div(class="form-group")
