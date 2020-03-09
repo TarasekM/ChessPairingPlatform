@@ -1,0 +1,57 @@
+extends shared\shared
+
+block config
+    -
+        var title = 'Szczegóły Turnieju'
+        var editTournamentUrl = '/putTournament'
+        var playerCreateUrl = '/postPlayer'
+        var editPlayerUrl = '/editPlayerName'
+
+block content-body
+    div(class='container')
+        h1=title
+        form(action=(editTournamentUrl + '?id=' + tournamentData.id) method='POST' enctype='application/json')
+            div(class="form-horizontal")
+                div(class="form-group")
+                    label(for='Title' class="control-label col-md-5") Tytuł turnieju:
+                    div(class="col-md-10")
+                        input(class="form-control" type="text" name="Title" id="Title" value=tournamentData.title)
+                div(class="form-group")
+                    label(class="control-label col-md-5") System Parowania:
+                    div(class="col-md-10")
+                        select(class="form-control" name="PairingSystem" id="PairingSystem")
+                            each system in tournamentSystems
+                                option(value=system selected=(system === optionValue))
+                                    p=system
+                div(class="form-group")
+                    label(class="control-label col-md-5") Data rozpoczęcia turnieju:
+                        input(class="form-control" type="date" name="Date" id="Date" value=date)
+                div(class="form-group")
+                    label(class="control-label col-md-5") Data rozpoczęcia turnieju:
+                        input(type='hidden' name="id" value=tournamentData.id)
+                div(class="form-group")
+                    div(class="col-md-offset-2 col-md-10")
+                        input(type="submit" value="Zapisz" class="btn btn-primary")
+        h2 Dodaj graczy
+        form(action=(playerCreateUrl + '?id=' + tournamentData.id) method='POST' enctype='application/json')
+            div(class="form-horizontal")
+                div(class="form-group")
+                    label(for='Name' class="control-label col-md-5") Imię i nazwisko gracza
+                    div(class="col-md-10")
+                        input(class="form-control" type="text" name="Name" id="Name" placeholder='Podaj imię i nazwisko')
+                div(class="form-group")
+                    div(class="col-md-offset-2 col-md-10")
+                        input(type="submit" value="Dodaj" class="btn btn-primary")
+        h2 Lista Graczy
+        div(class="container form-group d-flex flex-row justify-start align-items-center w-100")
+            each player in players
+                div(class="card m-3 p-3")
+                    div(class="card-header")
+                        p=("Gracz nr" + " " + (player.id + 1))
+                    form(action=(editPlayerUrl + '?playerID=' + player.guid + '&tournamentID=' + tournamentData.id)
+                        class="d-flex flex-column justify-content-center align-items-center"
+                        method='POST' enctype='application/json')
+                        label(for='Name' class="control-label m-1") Imię i nazwisko gracza
+                        div(class="col-md-10 m-1")
+                            input(class="form-control" type="text" name="Name" id="Name" value=player.name)
+                        input(type="submit" value="Zapisz" class="btn btn-primary")
