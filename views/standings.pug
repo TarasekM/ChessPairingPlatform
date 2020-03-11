@@ -18,12 +18,14 @@ block content-body
                 each player, index in data
                     tr
                         th(scope="row")=(index + 1)
-                        td=(player.id + 1)
+                        td=(player.id)
                         td=player.name
                         td=player.score
                         td TODO
 
-        form(action=('/pairTournament' + tournamentID) method="GET")
+        form(action=(pairingUrl) method="GET")
             div(class="form-horizontal d-flex justify-content-center align-items-center")
                 div(class="form-group")
                     input(type="submit" value="Przejdź do następnej rundy" class="btn btn-primary")
+                div(class="form-group")
+                    input(type="hidden" name="id" value=tournamentID)

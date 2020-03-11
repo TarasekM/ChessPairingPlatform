@@ -43,11 +43,11 @@ block content-body
                     div(class="col-md-offset-2 col-md-10")
                         input(type="submit" value="Dodaj" class="btn btn-primary")
         h2 Lista Graczy
-        div(class="container form-group d-flex flex-row justify-start align-items-center w-100")
+        div(class="container form-group d-flex flex-row justify-start align-items-center w-100 flex-wrap")
             each player in players
                 div(class="card m-3 p-3")
                     div(class="card-header")
-                        p=("Gracz nr" + " " + (player.id + 1))
+                        p=("Gracz nr" + " " + (player.id))
                     form(action=(editPlayerUrl + '?playerID=' + player.guid + '&tournamentID=' + tournamentData.id)
                         class="d-flex flex-column justify-content-center align-items-center"
                         method='POST' enctype='application/json')
