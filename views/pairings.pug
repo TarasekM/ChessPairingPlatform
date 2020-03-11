@@ -1,0 +1,46 @@
+extends shared\shared
+
+block config
+    script(src="/js/pair.js")
+    -
+        var title = ("Parowanie dla rundy: " + (tournamentData.currentRound + 1))
+block content-body
+    div(class="container")
+        h1=title
+        table(class="table text-center")
+            thead
+                th(scope="col") Stół
+                th(scope="col") Punkty
+                th(scope="col") Numer
+                th(scope="col") Białe
+                th(scope="col") Wynik
+                th(scope="col") Czarne
+                th(scope="col") Numer
+                th(scope="col") Punkty
+                th(scope="col") Stół
+            tbody
+                each pair, index in pairings
+                    tr
+                        th(scope="row")=(index + 1)
+                        td=pair[0].score
+                        td=(pair[0].id)
+                        td=pair[0].name
+                        input(type="hidden" value=pair[0].guid id=("white" + index))
+                        td
+                            select(class="form-control" name="PairingSystem" id="PairingSystem")
+                                option
+                                    p ---
+                                each option in pointsOptions
+                                    option(value=option)
+                                        p=option
+                        input(type="hidden" value=pair[1].guid id=("black" + index))
+                        td=pair[1].name
+                        td=(pair[1].id)
+                        td=pair[1].score
+                        td=(index + 1)
+        form(action=(pairingUrl) method="GET")
+        div(class="form-horizontal d-flex justify-content-center align-items-center")
+            div(class="form-group")
+                input(type="submit" value="Przejdź do następnej rundy" class="btn btn-primary")
+            div(class="form-group")
+                input(type="hidden" name="id" value=tournamentID)

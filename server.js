@@ -18,13 +18,17 @@ app.set('views', path.join(__dirname, 'views'));
 
 var port = 3000
 var apiURL = 'http://localhost:64936/';
+var pairingUrl = "/pairTournament"
+
 var endpoints = {
     'tournament': 'api/TournamentModels',
     'players': 'api/PlayerModels',
-    'highscore': '/highscore'
+    'highscore': '/highscore',
+    'pair': '/pair'
 
 };
 
+var pointsOptions = ['1 - 0', '0.5 - 0.5', '0 - 1']
 var tournamentSystems = ['Kołowy', 'Szwajcarski', 'Pucharowy']
 
 app.get('/', function(req, res){
@@ -155,7 +159,7 @@ app.post('/postPlayer', urlencodedParser, async(req, res) => {
 });
 
 app.get('/standings', (req, res)=>{
-    var tournamentID = req.query.id
+    var tournamentID = req.query.id;
     var url = (apiURL + endpoints.tournament + '/' +
                tournamentID + endpoints.highscore);
     var xhr = new XMLHttpRequest();
@@ -167,6 +171,7 @@ app.get('/standings', (req, res)=>{
                 res.render('standings', { 
                     data: data,
                     tournamentID: tournamentID,
+                    pairingUrl: pairingUrl
                 });
             } else {
                 res.sendStatus(xhr.status);
@@ -175,6 +180,49 @@ app.get('/standings', (req, res)=>{
     };
     xhr.send();
 });
+
+app.get('/pairTournament', (req, res)=>{
+    var tournamentID = req.query.id
+    var tournamentDataURL = (apiURL + endpoints.tournament +
+        "/" + tournamentID);
+    var url = (apiURL + endpoints.tournament + '/' +
+               tournamentID + endpoints.pair);
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", tournamentDataURL, true);
+    xhr.onload = function (e) {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                var tournamentData = JSON.parse(this.responseText)
+                sendPairingsToRes(res, url, tournamentData);
+            } else {
+                res.sendStatus(xhr.status);
+            }
+        }
+    };
+    xhr.send();
+});
+
+function sendPairingsToRes(res, url, tournamentData){
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.onload = function (e) {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                var pairings = JSON.parse(this.responseText)
+                res.render("pairings",
+                    { 
+                        tournamentData: tournamentData,
+                        pairings: pairings,
+                        pairingUrl: pairingUrl,
+                        pointsOptions: pointsOptions,
+                    });
+            } else {
+                res.sendStatus(xhr.status);
+            }
+        }
+    };
+    xhr.send();
+}
 
 app.get('/FindTournament', function(req, res){
     res.render('findTournament');
