@@ -24,7 +24,8 @@ var endpoints = {
     'tournament': 'api/TournamentModels',
     'players': 'api/PlayerModels',
     'highscore': '/highscore',
-    'pair': '/pair'
+    'pair': '/pair',
+    'setScores': '/setScores'
 
 };
 
@@ -85,6 +86,7 @@ async function sendDataToEdit(res, url, players){
                     optionValue: optionValue,
                     date: substringDate(tournamentData.date),
                     players: players,
+                    pairingUrl: pairingUrl,
                 });
             }else{
                 res.sendStatus(xhr.status)
@@ -223,6 +225,28 @@ function sendPairingsToRes(res, url, tournamentData){
     };
     xhr.send();
 }
+
+app.post('/sendScores', jsonParser, async(req, res)=>{
+    var tournamentID = req.query.id;
+    var redirect = '/standings' + '?id=' + tournamentID
+    var scores = JSON.stringify(req.body);
+    var url = (apiURL + endpoints.tournament + "/" +
+               tournamentID + endpoints.setScores);
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    
+    xhr.onload = function (e) {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                res.send(redirect);
+            } else {
+                res.sendStatus(xhr.status);
+            }
+        }
+    };
+    xhr.send(scores);
+});
 
 app.get('/FindTournament', function(req, res){
     res.render('findTournament');
