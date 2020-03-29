@@ -3,6 +3,17 @@ extends shared\shared
 block config
     -
         var title = 'Znajdź Turniej'
+        var url = "/editTournament"
 
 block content-body
-    p W tym miejcu będzie można wyszukać turniej
+    div(class='container')
+        h1=title
+        form(action=(url) method='GET')
+            div(class="form-horizontal")
+                div(class="form-group")
+                    label(for='id' class="control-label col-md-5") Podaj id turnieju:
+                    div(class="col-md-10")
+                        input(class="form-control" type="text" name="id" id="id" placeholder="Podaj id")
+                div(class="form-group")
+                    div(class="col-md-offset-2 col-md-10")
+                        input(type="submit" value="Wyszukaj" class="btn btn-primary")
