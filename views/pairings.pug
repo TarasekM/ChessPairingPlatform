@@ -1,9 +1,9 @@
 extends shared\shared
 
 block config
-    script(src="/js/pair.js")
+    script(src="/js/pairTournament.js")
     -
-        var title = ("Parowanie dla rundy: " + (tournamentData.currentRound + 1))
+        var title = ("Parowanie dla rundy: " + (tournamentData.currentRound))
 block content-body
     div(class="container")
         h1=title
@@ -27,8 +27,8 @@ block content-body
                         td=pair[0].name
                         input(type="hidden" value=pair[0].guid id=("white" + index))
                         td
-                            select(class="form-control" name="PairingSystem" id="PairingSystem")
-                                option
+                            select(class="form-control" name="score" id="score" onchange="scoreListener()")
+                                option(value="---")
                                     p ---
                                 each option in pointsOptions
                                     option(value=option)
@@ -38,9 +38,9 @@ block content-body
                         td=(pair[1].id)
                         td=pair[1].score
                         td=(index + 1)
-        form(action=(pairingUrl) method="GET")
         div(class="form-horizontal d-flex justify-content-center align-items-center")
             div(class="form-group")
-                input(type="submit" value="Przejdź do następnej rundy" class="btn btn-primary")
+                input(type="submit" value="Prześlij wyniki" class="btn btn-primary"
+                        id="nextRoundButton" onclick="nextRound()" disabled)
             div(class="form-group")
-                input(type="hidden" name="id" value=tournamentID)
+                input(type="hidden" name="id" value=tournamentData.id id="id")
