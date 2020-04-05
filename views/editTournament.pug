@@ -1,11 +1,13 @@
 extends shared\shared
 
 block config
+    script(src="/js/editTournament.js")
     -
         var title = 'Szczegóły Turnieju'
         var editTournamentUrl = '/putTournament'
         var playerCreateUrl = '/postPlayer'
         var editPlayerUrl = '/editPlayerName'
+        var deletePlayerUrl = '/deletePlayer'
 
 block content-body
     div(class='container')
@@ -48,7 +50,11 @@ block content-body
             each player in players
                 div(class="card m-3 p-3")
                     div(class="card-header")
-                        p=("Gracz nr" + " " + (player.id))
+
+                        div(class='d-flex flex-row justify-content-between align-content-start')
+                            p=("Gracz nr" + " " + (player.id))
+                            - var route = (deletePlayerUrl + '?playerID=' + player.guid + "&tournamentID=" + tournamentID)
+                            button(type="button" onclick="result('" + route + "')" class="btn btn-danger") X
                     form(action=(editPlayerUrl + '?playerID=' + player.guid + '&tournamentID=' + tournamentData.id)
                         class="d-flex flex-column justify-content-center align-items-center"
                         method='POST' enctype='application/json')

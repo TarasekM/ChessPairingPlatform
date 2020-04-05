@@ -135,8 +135,6 @@ app.post('/editPlayerName', urlencodedParser, (req,res)=>{
             }
         }
     };
-    console.log(data, url);
-
     xhr.send(data);
 });
 
@@ -144,7 +142,6 @@ app.post('/postPlayer', urlencodedParser, async(req, res) => {
     var tournamentId = req.query.id
     redirect = '/editTournament' + '?id=' + tournamentId
     data = JSON.stringify(req.body);
-    console.log(data);
     url = (apiURL + endpoints.players + '/' + req.query.id);
 
     var xhr = new XMLHttpRequest();
@@ -160,6 +157,26 @@ app.post('/postPlayer', urlencodedParser, async(req, res) => {
         }
     };
     xhr.send(data);
+});
+
+app.post('/deletePlayer', (req, res)=>{
+    var playerID = req.query.playerID;
+    var tournamentID = req.query.tournamentID;
+    var url = (
+            apiURL + endpoints.players +
+            '/' + tournamentID +
+            '/' + playerID
+        );
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("DELETE", url, true);
+    xhr.setRequestHeader("Content-Type", "application-x-www-form-urlencoded");
+    xhr.onload = function (e) {
+        if (xhr.readyState === 4) {
+            res.sendStatus(xhr.status)
+        }
+    };
+    xhr.send();
 });
 
 app.get('/standings', (req, res)=>{
