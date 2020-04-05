@@ -87,6 +87,7 @@ async function sendDataToEdit(res, url, players){
                     date: substringDate(tournamentData.date),
                     players: players,
                     pairingUrl: pairingUrl,
+                    tournamentID: tournamentData.id
                 });
             }else{
                 res.sendStatus(xhr.status)
@@ -117,15 +118,14 @@ app.post('/putTournament', urlencodedParser, function(req, res){
 });
 
 app.post('/editPlayerName', urlencodedParser, (req,res)=>{
-    var data = req.body
-    var url = (apiURL + endpoints.players + "/" + req.query.playerID
-            + '?Name=' + data.Name)
+    var data = JSON.stringify(req.body);
+    var url = (apiURL + endpoints.players + "/" + req.query.playerID)
     var tournamentID = req.query.tournamentID
     var redirect = '/editTournament' + '?id=' + tournamentID
 
     var xhr = new XMLHttpRequest();
     xhr.open("PUT", url, true);
-    
+    xhr.setRequestHeader("Content-Type", "application/json");    
     xhr.onload = function (e) {
         if (xhr.readyState === 4) {
             if (xhr.status === 204) {
@@ -135,19 +135,21 @@ app.post('/editPlayerName', urlencodedParser, (req,res)=>{
             }
         }
     };
-    xhr.send();
+    console.log(data, url);
+
+    xhr.send(data);
 });
 
 app.post('/postPlayer', urlencodedParser, async(req, res) => {
     var tournamentId = req.query.id
     redirect = '/editTournament' + '?id=' + tournamentId
-    data = req.body
-    url = (apiURL + endpoints.players +
-           '/' + req.query.id + '?Name=' + data.Name);
+    data = JSON.stringify(req.body);
+    console.log(data);
+    url = (apiURL + endpoints.players + '/' + req.query.id);
 
     var xhr = new XMLHttpRequest();
     xhr.open("POST", url, true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.setRequestHeader("Content-Type", "application/json");
     xhr.onload = function (e) {
         if (xhr.readyState === 4) {
             if (xhr.status === 201) {
@@ -157,7 +159,7 @@ app.post('/postPlayer', urlencodedParser, async(req, res) => {
             }
         }
     };
-    xhr.send();
+    xhr.send(data);
 });
 
 app.get('/standings', (req, res)=>{
@@ -217,6 +219,7 @@ function sendPairingsToRes(res, url, tournamentData){
                         pairings: pairings,
                         pairingUrl: pairingUrl,
                         pointsOptions: pointsOptions,
+                        tournamentID: tournamentData.id
                     });
             } else {
                 res.sendStatus(xhr.status);

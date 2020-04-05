@@ -9,6 +9,7 @@ block config
 
 block content-body
     div(class='container')
+        include shared/sub-nav
         h1=title
         form(action=(editTournamentUrl + '?id=' + tournamentData.id) method='POST' enctype='application/json')
             div(class="form-horizontal")
