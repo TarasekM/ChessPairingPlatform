@@ -1,6 +1,9 @@
 extends shared\shared
 
 block config
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js")
+    script(src="/js/filterTournaments.js")
+
     -
         var title = 'Znajdź Turniej'
         var url = "/editTournament"
@@ -8,12 +11,19 @@ block config
 block content-body
     div(class='container')
         h1=title
-        form(action=(url) method='GET')
+        form
             div(class="form-horizontal")
                 div(class="form-group")
-                    label(for='id' class="control-label col-md-5") Podaj id turnieju:
+                    label(for='id' class="control-label col-md-5") Podaj nazwę turnieju:
                     div(class="col-md-10")
-                        input(class="form-control" type="text" name="id" id="id" placeholder="Podaj id")
+                        input(class="form-control" type="text" name="id" id="id" placeholder="Podaj nazwę" onchange="filter()")
                 div(class="form-group")
                     div(class="col-md-offset-2 col-md-10")
-                        input(type="submit" value="Wyszukaj" class="btn btn-primary")
+                        input(value="Wyszukaj" class="btn btn-primary" onclick='filter')
+        each tournament in tournaments
+            div(class="card m-1")
+                div(class="card-header")=('System rozgrywek: ' + tournament.pairingSystem)
+                div(class="card-body")
+                    h5(class="card-title")=('Tytuł turnieju: ' + tournament.title)
+                    p(class="card-text")=('Data rozpoczęcia turnieju: ' + tournament.date.substring(10, 0))
+                    a(href=("/editTournament?id=" + tournament.id) class="btn btn-primary") Przejdź do turnieju

@@ -252,7 +252,22 @@ app.post('/sendScores', jsonParser, async(req, res)=>{
 });
 
 app.get('/FindTournament', function(req, res){
-    res.render('findTournament');
+    var url = apiURL + endpoints.tournament;
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.onload = function (e) {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200){
+                tournaments = JSON.parse(xhr.responseText)
+                res.render('findTournament', {
+                    tournaments: tournaments
+                });
+            }else{
+                res.sendStatus(xhr.status)
+            }
+        }
+    };
+    xhr.send();
 });
 
 app.get('/Info', function(req, res){
