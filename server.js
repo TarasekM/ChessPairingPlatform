@@ -93,18 +93,18 @@ async function sendDataToEdit(res, url, players){
 }
 
 app.post('/putTournament', urlencodedParser, function(req, res){ 
-    url = apiURL + endpoints.tournament + "/" + req.query.id
-    data = JSON.stringify(req.body)
-    console.log(data)
+    var tournamentID = req.query.id;
+    var redirect = '/editTournament' + '?id=' + tournamentID
+    var url = apiURL + endpoints.tournament + "/" + tournamentID;
+    var data = JSON.stringify(req.body)
     var xhr = new XMLHttpRequest();
     xhr.open("PUT", url, true);
     xhr.setRequestHeader("Content-Type", "application/json");
     
     xhr.onload = function (e) {
         if (xhr.readyState === 4) {
-            if (xhr.status === 201) {
-                responseText = JSON.parse(this.responseText)
-                res.redirect(redirect_point + '?id=' + responseText.id)
+            if (xhr.status === 204) {
+                res.redirect(redirect);
             } else {
                 res.sendStatus(xhr.status)
             }
@@ -289,7 +289,6 @@ app.post('/deleteTournament', (req, res)=>{
             apiURL + endpoints.tournament +
             '/' + tournamentID
         );
-    console.log(url);
     var xhr = new XMLHttpRequest();
     xhr.open("DELETE", url, true);
     xhr.setRequestHeader("Content-Type", "application-x-www-form-urlencoded");

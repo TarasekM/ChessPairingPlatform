@@ -9,7 +9,7 @@ block config
         var editPlayerUrl = '/editPlayerName'
         var deletePlayerUrl = '/deletePlayer'
 
-        var maxRound = (players.length - 1)
+        var maxRound = tournamentData.maxRound
         var minRound = Math.floor(maxRound/2)
         minRound = minRound < 8 ? minRound : 8
 
@@ -17,7 +17,7 @@ block content-body
     div(class='container')
         include shared/sub-nav
         h1=title
-        form(action=(editTournamentUrl + '?id=' + tournamentData.id) method='POST' enctype='application/json')
+        form(action=(editTournamentUrl + '?id=' + tournamentData.id) method='POST' enctype='application/json' id='putTournament')
             div(class="form-horizontal")
                 div(class="form-group")
                     label(for='Title' class="control-label col-md-5") Tytuł turnieju:
@@ -26,7 +26,7 @@ block content-body
                 div(class="form-group")
                     label(class="control-label col-md-5") System Parowania:
                     div(class="col-md-10")
-                        select(class="form-control" name="PairingSystem" id="PairingSystem")
+                        select(class="form-control" name="PairingSystem" id="PairingSystem" onchange="this.form.submit()")
                             each system in tournamentSystems
                                 option(value=system selected=(system === optionValue))
                                     p=system
@@ -34,14 +34,15 @@ block content-body
                     label(class="control-label col-md-5") Data rozpoczęcia turnieju:
                     div(class="col-md-10 w-25")
                         input(class="form-control" type="date" name="Date" id="Date" value=date)
-                
                 div(class="form-group")
                     label(class="control-label col-md-5") Ilość rund:
                     div(class="col-md-10 w-25")
-                        select(class="form-control" name="MaxRound" id="MaxRound")
+                        select(class="form-control" name="Rounds" id="Rounds")
                             while minRound++ < maxRound
-                                option(value=minRound selected=(minRound == tournamentData.maxRound))
+                                option(value=minRound selected=(minRound == tournamentData.rounds))
                                     p=minRound
+                div(class="form-group")
+                        input(type='hidden' name="MaxRounds" id='MaxRounds' value=maxRound)
                 div(class="form-group")
                         input(type='hidden' name="id" value=tournamentData.id)
                 div(class="form-group")
