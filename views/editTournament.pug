@@ -9,6 +9,10 @@ block config
         var editPlayerUrl = '/editPlayerName'
         var deletePlayerUrl = '/deletePlayer'
 
+        var maxRound = (players.length - 1)
+        var minRound = Math.floor(maxRound/2)
+        minRound = minRound < 8 ? minRound : 8
+
 block content-body
     div(class='container')
         include shared/sub-nav
@@ -28,9 +32,17 @@ block content-body
                                     p=system
                 div(class="form-group")
                     label(class="control-label col-md-5") Data rozpoczęcia turnieju:
+                    div(class="col-md-10 w-25")
                         input(class="form-control" type="date" name="Date" id="Date" value=date)
+                
                 div(class="form-group")
-                    label(class="control-label col-md-5") Data rozpoczęcia turnieju:
+                    label(class="control-label col-md-5") Ilość rund:
+                    div(class="col-md-10 w-25")
+                        select(class="form-control" name="MaxRound" id="MaxRound")
+                            while minRound++ < maxRound
+                                option(value=minRound selected=(minRound == tournamentData.maxRound))
+                                    p=minRound
+                div(class="form-group")
                         input(type='hidden' name="id" value=tournamentData.id)
                 div(class="form-group")
                     div(class="col-md-offset-2 col-md-10")

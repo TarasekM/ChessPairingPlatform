@@ -43,12 +43,7 @@ app.get('/CreateTournament', function(req, res){
 app.post('/postTournament', urlencodedParser, async(req, res) =>{
     
     redirect = '/editTournament'
-    data = JSON.stringify({
-                Title: req.body.Title,
-                PairingSystem: req.body.PairingSystem,
-                Date: req.body.Date
-                }
-            )
+    data = JSON.stringify(req.body)
     url = apiURL + endpoints.tournament
     postXHRRequest(url, data, redirect, res);
 });
@@ -100,6 +95,7 @@ async function sendDataToEdit(res, url, players){
 app.post('/putTournament', urlencodedParser, function(req, res){ 
     url = apiURL + endpoints.tournament + "/" + req.query.id
     data = JSON.stringify(req.body)
+    console.log(data)
     var xhr = new XMLHttpRequest();
     xhr.open("PUT", url, true);
     xhr.setRequestHeader("Content-Type", "application/json");
@@ -287,6 +283,24 @@ app.get('/FindTournament', function(req, res){
     xhr.send();
 });
 
+app.post('/deleteTournament', (req, res)=>{
+    var tournamentID = req.query.id;
+    var url = (
+            apiURL + endpoints.tournament +
+            '/' + tournamentID
+        );
+    console.log(url);
+    var xhr = new XMLHttpRequest();
+    xhr.open("DELETE", url, true);
+    xhr.setRequestHeader("Content-Type", "application-x-www-form-urlencoded");
+    xhr.onload = function (e) {
+        if (xhr.readyState === 4) {
+            res.sendStatus(xhr.status)
+        }
+    };
+    xhr.send();
+});
+
 app.get('/Info', function(req, res){
     res.render('info');
 });
@@ -306,7 +320,7 @@ function postXHRRequest(url, data, redirect_point, res){
                 responseText = JSON.parse(this.responseText) 
                 res.redirect(redirect_point + '?id=' + responseText.id)
             } else {
-                res.send(xhr.status)
+                res.sendStatus(xhr.status)
             }
         }
     };

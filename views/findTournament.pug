@@ -1,11 +1,13 @@
 extends shared\shared
 
 block config
+    script(src="/js/findTournament.js")
     script(src="/js/filterTournaments.js")
 
     -
         var title = 'Znajdź Turniej'
         var url = "/editTournament"
+        var deleteTournamentUrl = "/deleteTournament"
 
 block content-body
     div(class='container')
@@ -21,7 +23,10 @@ block content-body
                         input(value="Wyszukaj" class="btn btn-primary" onclick='filter')
         each tournament in tournaments
             div(class="card m-1")
-                div(class="card-header")=('System rozgrywek: ' + tournament.pairingSystem)
+                div(class='card-header d-flex flex-row justify-content-between align-content-start')
+                            p=('System rozgrywek: ' + tournament.pairingSystem)
+                            - var route = (deleteTournamentUrl + '?id=' + tournament.id)
+                            button(type="button" onclick="result('" + route + "')" class="btn btn-danger") X
                 div(class="card-body")
                     h5(class="card-title")=('Tytuł turnieju: ' + tournament.title)
                     p(class="card-text")=('Data rozpoczęcia turnieju: ' + tournament.date.substring(10, 0))
