@@ -25,8 +25,8 @@ var endpoints = {
     'players': 'api/PlayerModels',
     'highscore': '/highscore',
     'pair': '/pair',
-    'setScores': '/setScores'
-
+    'setScores': '/setScores',
+    'hasEnded': '/hasEnded'
 };
 
 var pointsOptions = ['1 - 0', '0.5 - 0.5', '0 - 1']
@@ -74,16 +74,20 @@ async function sendDataToEdit(res, url, players){
     xhr.onload = function (e) {
         if (xhr.readyState === 4) {
             if (xhr.status === 200){
-                tournamentData = JSON.parse(xhr.responseText)
-                var optionValue = tournamentData.pairingSystem
-                res.render('editTournament', {
-                    tournamentSystems: tournamentSystems, 
-                    optionValue: optionValue,
-                    date: substringDate(tournamentData.date),
-                    players: players,
-                    pairingUrl: pairingUrl,
-                    tournamentID: tournamentData.id
-                });
+                tournamentData = JSON.parse(xhr.responseText);
+                if (tournamentData.hasEnded == true){
+                    res.redirect('/standings?id=' + tournamentData.id);
+                }else{
+                    var optionValue = tournamentData.pairingSystem;
+                    res.render('editTournament', {
+                        tournamentSystems: tournamentSystems, 
+                        optionValue: optionValue,
+                        date: substringDate(tournamentData.date),
+                        players: players,
+                        pairingUrl: pairingUrl,
+                        tournamentID: tournamentData.id
+                    });
+                }
             }else{
                 res.sendStatus(xhr.status)
             }
@@ -175,10 +179,29 @@ app.post('/deletePlayer', (req, res)=>{
     xhr.send();
 });
 
-app.get('/standings', (req, res)=>{
+app.get('/standings', async(req, res)=>{
     var tournamentID = req.query.id;
     var url = (apiURL + endpoints.tournament + '/' +
                tournamentID + endpoints.highscore);
+    var hasEndedUrl = (apiURL + endpoints.tournament + '/' +
+        tournamentID + endpoints.hasEnded);
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", hasEndedUrl, true);
+    xhr.onload = function (e) {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200){
+                var hasEnded = JSON.parse(xhr.responseText);
+                var endedText = hasEnded ? "- Zakończono" : "- W trakcie";
+                sendHighscoreToRes(res, url, tournamentID, endedText)
+            }else{
+                res.sendStatus(xhr.status);
+            }
+        }
+    };
+    xhr.send();
+});
+
+function sendHighscoreToRes(res, url, tournamentID, endedText){
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url, true);
     xhr.onload = function (e) {
@@ -188,7 +211,8 @@ app.get('/standings', (req, res)=>{
                 res.render('standings', { 
                     data: data,
                     tournamentID: tournamentID,
-                    pairingUrl: pairingUrl
+                    pairingUrl: pairingUrl,
+                    endedText: endedText
                 });
             } else {
                 res.sendStatus(xhr.status);
@@ -196,7 +220,7 @@ app.get('/standings', (req, res)=>{
         }
     };
     xhr.send();
-});
+}
 
 app.get('/pairTournament', (req, res)=>{
     var tournamentID = req.query.id
@@ -210,7 +234,11 @@ app.get('/pairTournament', (req, res)=>{
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 var tournamentData = JSON.parse(this.responseText)
-                sendPairingsToRes(res, url, tournamentData);
+                if (tournamentData.hasEnded == true){
+                    res.redirect('/standings?id=' + tournamentData.id);
+                }else{
+                    sendPairingsToRes(res, url, tournamentData);
+                }
             } else {
                 res.sendStatus(xhr.status);
             }
