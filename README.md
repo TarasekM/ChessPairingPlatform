@@ -10,7 +10,7 @@
 ### Opis działania.
 Użytkownik wysyła żądanie poprzez przeglądarkę internetową. Serwer internetowy je przetwarza i przekazuje dalej do serwera API.Interfejs API decyduje co zrobić z żądaniem po czym  odsyła odpowiedź. Silnik szablonów generujeodpowiednią stronę na podstawie otrzymanych danych. Serwer internetowy wysyła wygenerowaną stronę użytkownikowi.
 
-![Diagram działania platformy siecowej](Schemat_dzialania.png)
+![Diagram działania platformy siecowej](Schemat_dzialania.jpg)
 
 ### Do repozytorium dołączam plik PDF (Praca-Inz-2020.pdf) z pracą inżynierską.
 
