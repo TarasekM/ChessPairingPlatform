@@ -1,1 +1,4 @@
-# ChessPairingPlatform
+### ChessPairingPlatform - platforma sieciowa służąca do parowania graczy w amatorskich turniejach szachowych. Projekt pracy inżynierskiej, który został obroniony w sierpniu 2020 roku.
+# Celem przedstawionej pracy jest stworzenie platformy sieciowej za pomocą wysokopoziomowych narzędzi oraz ogólnie przyjętych praktyk tworzenia oprogramowania. Aplikacja ma umożliwiać kojarzenie graczy w amatorskich turniejach szachowych bez potrzeby instalacji dodatkowego oprogramowania na sprzęcie lokalnym. Pomniejszym celem jest stworzenie autorskich systemów parowań pozwalających na przebieg turnieju zgodnie z założeniami przyjętymi przez Międzynarodową Organizację Szachową [FIDE]. Praca zawiera opisy działania algorytmów wraz ze schematami blokowymi, projekt platformy sieciowej oraz opis napotkanych problemów wraz z ich rozwiązaniem.
+# Najnowsza wersja programu znajduje się na branch'u "features". TODO naprawa commit history oraz merge na master.
+# Do repozytorium dołączam plik PDF (Praca-Inz-2020.pdf) z pracą inżynierską.
